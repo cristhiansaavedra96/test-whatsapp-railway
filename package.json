@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "complete": "rmdir /s /q node_modules && npm cache clean --force && npm ci && npm start",
+    "completeLinux": "rm -rf node_modules && npm cache clean --force && npm ci && npm start"
   },
   "keywords": [],
   "author": "",
