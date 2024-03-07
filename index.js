@@ -1,10 +1,11 @@
 const express = require('express');
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
+const qrImg = require('qr-image');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const globalQr = '';
+let globalQr = '';
 
 const client = new Client({
 	puppeteer: {
@@ -25,7 +26,9 @@ const client = new Client({
 
 // Ruta para obtener el código QR como imagen
 app.get('/getQR', (req, res) => {
-	res.send(globalQr);
+	const qr = qrImg.image(globalQr, { type: 'png' });
+	res.type('png');
+	qr.pipe(res);
 });
 
 app.get('/', (req, res) => {
