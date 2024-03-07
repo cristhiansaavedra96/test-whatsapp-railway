@@ -30,6 +30,10 @@ app.get('/getQR', (req, res) => {
 	qrcode.toFileStream(res);
 });
 
+app.get('/', (req, res) => {
+	res.send('Servidor en línea');
+});
+
 client.on('ready', () => {
 	console.log('Client is ready!');
 });
@@ -44,5 +48,6 @@ client.initialize();
 
 // Iniciar el servidor web
 app.listen(port, () => {
-	console.log(`Servidor web iniciado en http://localhost:${port}`);
+	console.log(`Servidor web iniciado en puerto: ${port}`);
 });
+
