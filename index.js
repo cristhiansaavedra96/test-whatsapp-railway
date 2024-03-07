@@ -4,6 +4,7 @@ const { Client } = require('whatsapp-web.js');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const globalQr = '';
 
 const client = new Client({
 	puppeteer: {
@@ -24,10 +25,7 @@ const client = new Client({
 
 // Ruta para obtener el código QR como imagen
 app.get('/getQR', (req, res) => {
-	const qrCode = client.generateQRCode();
-	qrcode.generate(qrCode, { small: true });
-	res.type('png');
-	qrcode.toFileStream(res);
+	res.send(globalQr);
 });
 
 app.get('/', (req, res) => {
@@ -47,6 +45,7 @@ client.on('message', async (message) => {
 client.on('qr', (qr) => {
 	// Generate and scan this code with your phone
 	qrcode.generate(qr, { small: true });
+	globalQr = qr;
 });
 
 client.initialize();
