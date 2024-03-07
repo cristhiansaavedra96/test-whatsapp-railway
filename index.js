@@ -1,9 +1,10 @@
+const express = require('express');
 const qrcode = require('qrcode-terminal');
-
 const { Client } = require('whatsapp-web.js');
-/*
-{ args: ['--no-sandbox', '--disable-setuid-sandbox'] } and ignoreDefaultArgs: ['--disable-extensions']
-*/
+
+const app = express();
+const port = 3000; // Puedes cambiar el puerto según tus necesidades
+
 const client = new Client({
 	puppeteer: {
 		headless: true,
@@ -21,8 +22,12 @@ const client = new Client({
 	},
 });
 
-client.on('qr', (qr) => {
-	qrcode.generate(qr, { small: true });
+// Ruta para obtener el código QR como imagen
+app.get('/getQR', (req, res) => {
+	const qrCode = client.generateQRCode();
+	qrcode.generate(qrCode, { small: true });
+	res.type('png');
+	qrcode.toFileStream(res);
 });
 
 client.on('ready', () => {
@@ -36,3 +41,8 @@ client.on('message', async (message) => {
 });
 
 client.initialize();
+
+// Iniciar el servidor web
+app.listen(port, () => {
+	console.log(`Servidor web iniciado en http://localhost:${port}`);
+});
