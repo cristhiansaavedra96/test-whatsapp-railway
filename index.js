@@ -1,13 +1,38 @@
-const { Client, LocalAuth } = require('whatsapp-web.js')
-const qrcode = require('qrcode-terminal')
+const qrcode = require('qrcode-terminal');
 
-const whatsappClient = new Client({
-	headless: true,
-	puppeteer: { args: ['--no-sandbox'] },
-	authStrategy: new LocalAuth
-})
+const { Client } = require('whatsapp-web.js');
+/*
+{ args: ['--no-sandbox', '--disable-setuid-sandbox'] } and ignoreDefaultArgs: ['--disable-extensions']
+*/
+const client = new Client({
+	puppeteer: {
+		headless: true,
+		args: [
+			'--no-sandbox',
+			'--disable-setuid-sandbox',
+			'--disable-extensions',
+			'--disable-dev-shm-usage',
+			'--disable-gpu',
+			'--no-first-run',
+			'--no-zygote',
+			'--single-process',
+		],
+		ignoreDefaultArgs: ['--disable-extensions'],
+	},
+});
 
-whatsappClient.on("qr", (qr) => qrcode.generate(qr, { small: true }))
-whatsappClient.on("ready", () => console.log("client is ready"))
+client.on('qr', (qr) => {
+	qrcode.generate(qr, { small: true });
+});
 
-whatsappClient.initialize()
+client.on('ready', () => {
+	console.log('Client is ready!');
+});
+
+client.on('message', async (message) => {
+	if (message.body === '!ping') {
+		await client.sendMessage(message.from, 'pong');
+	}
+});
+
+client.initialize();
