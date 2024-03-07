@@ -3,7 +3,7 @@ const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 
 const app = express();
-const port = 3000; // Puedes cambiar el puerto según tus necesidades
+const port = process.env.PORT || 3000;
 
 const client = new Client({
 	puppeteer: {
@@ -44,10 +44,15 @@ client.on('message', async (message) => {
 	}
 });
 
+client.on('qr', (qr) => {
+	// Generate and scan this code with your phone
+	qrcode.generate(qr, { small: true });
+});
+
 client.initialize();
 
 // Iniciar el servidor web
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", function () {
 	console.log(`Servidor web iniciado en puerto: ${port}`);
 });
 
