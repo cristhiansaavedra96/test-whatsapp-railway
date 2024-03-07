@@ -9,13 +9,7 @@ const client = new Client({
 		headless: true,
 		args: [
 			'--no-sandbox',
-			'--disable-setuid-sandbox',
-			'--disable-extensions',
-			'--disable-dev-shm-usage',
-			'--disable-gpu',
-			'--no-first-run',
-			'--no-zygote',
-			'--single-process',
+			'--disable-setuid-sandbox'
 		],
 		ignoreDefaultArgs: ['--disable-extensions'],
 	},
